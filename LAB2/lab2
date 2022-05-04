@@ -1,0 +1,68 @@
+cqlsh> CREATE KEYSPACE LIBRARY2 WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3};
+cqlsh> use library2;
+cqlsh:library2> CREATE TABLE library_info2(stud_id int primary key,counter_value counter);
+cqlsh:library2> drop table if exists library_info2;
+cqlsh:library2> CREATE TABLE library_info2(stud_id int primary key,counter_value counter);
+cqlsh:library2> drop table library_info2;
+cqlsh:library2> CREATE TABLE library_info2(stud_id int,counter_value counter,stud_name text,book_name text,book_id int,date_of_issue timestamp,primary key(stud_id,stud_name,book_name,book_id,date_of_issue));
+cqlsh:library2> UPDATE library_info SET counter_value = counter_value + 1 WHERE stud_id
+            ... = 111 and stud_name = 'Neha' and book_name = 'BDA' and date_of_issue =
+            ... '2022-05-04'and book_id = 500;
+InvalidRequest: Error from server: code=2200 [Invalid query] message="unconfigured table library_info"
+cqlsh:library2> UPDATE library_info SET counter_value = counter_value + 1 WHERE stud_id
+            ... = 111 and stud_name = 'Neha' and book_name = 'BDA' and date_of_issue =
+            ... '2022-05-04'and book_id = 500
+            ... 
+            ... 
+            ... 
+cqlsh:library2> UPDATE library_info2 SET counter_value=counter_value+1 WHERE stud_id=111 and stud_name='Neha' and book_name='BDA' and date_of_issue='2022-05-04' and book_id=500;
+cqlsh:library2> UPDATE library_info2 SET counter_value=counter_value+1 WHERE stud_id=111 and stud_name='Neha' and book_name='BDA' and date_of_issue='2022-05-04' and book_id=500;
+cqlsh:library2> UPDATE library_info2 SET counter_value=counter_value+1 WHERE stud_id=112 and stud_name='Nikita' and book_name='BDA' and date_of_issue='2022-05-10' and book_id=501;
+cqlsh:library2> UPDATE library_info2 SET counter_value=counter_value+1 WHERE stud_id=113 and stud_name='Muskan' and book_name='ML' and date_of_issue='2022-05-11' and book_id=503;
+cqlsh:library2> UPDATE library_info2 SET counter_value=counter_value+1 WHERE stud_id=114 and stud_name='Abha' and book_name='OOMD' and date_of_issue='2022-05-15' and book_id=504;
+cqlsh:library2> UPDATE library_info2 SET counter_value=counter_value+1 WHERE stud_id=115 and stud_name='Sanchita' and book_name='ME' and date_of_issue='2022-05-23' and book_id=505;
+cqlsh:library2> SELECT * FROM library_info2;
+
+ stud_id | stud_name | book_name | book_id | date_of_issue                   | counter_value
+---------+-----------+-----------+---------+---------------------------------+---------------
+     114 |      Abha |      OOMD |     504 | 2022-05-14 18:30:00.000000+0000 |             1
+     111 |      Neha |       BDA |     500 | 2022-05-03 18:30:00.000000+0000 |             2
+     113 |    Muskan |        ML |     503 | 2022-05-10 18:30:00.000000+0000 |             1
+     112 |    Nikita |       BDA |     501 | 2022-05-09 18:30:00.000000+0000 |             1
+     115 |  Sanchita |        ME |     505 | 2022-05-22 18:30:00.000000+0000 |             1
+
+(5 rows)
+cqlsh:library2> UPDATE library_info2 SET counter_value=counter_value+1 WHERE stud_id=112 and stud_name='Nikita' and book_name='BDA' and date_of_issue='2022-05-10' and book_id=501;
+cqlsh:library2> SELECT * FROM library_info2;
+
+ stud_id | stud_name | book_name | book_id | date_of_issue                   | counter_value
+---------+-----------+-----------+---------+---------------------------------+---------------
+     114 |      Abha |      OOMD |     504 | 2022-05-14 18:30:00.000000+0000 |             1
+     111 |      Neha |       BDA |     500 | 2022-05-03 18:30:00.000000+0000 |             2
+     113 |    Muskan |        ML |     503 | 2022-05-10 18:30:00.000000+0000 |             1
+     112 |    Nikita |       BDA |     501 | 2022-05-09 18:30:00.000000+0000 |             2
+     115 |  Sanchita |        ME |     505 | 2022-05-22 18:30:00.000000+0000 |             1
+
+(5 rows)
+cqlsh:library2> select * from library_info2 where stud_id=112;
+
+ stud_id | stud_name | book_name | book_id | date_of_issue                   | counter_value
+---------+-----------+-----------+---------+---------------------------------+---------------
+     112 |    Nikita |       BDA |     501 | 2022-05-09 18:30:00.000000+0000 |             2
+
+(1 rows)
+cqlsh:library2> COPY library_info2(stud_id,counter_value,stud_name,book_name,book_id,date_of_issue) to 'c:\libraryInfo.csv';
+Using 11 child processes
+
+Starting copy of library2.library_info2 with columns [stud_id, counter_value, stud_name, book_name, book_id, date_of_issue].
+Processed: 5 rows; Rate:      45 rows/s; Avg. rate:      45 rows/s
+5 rows exported to 1 files in 0.138 seconds.
+cqlsh:library2> CREATE TABLE library_info22(stud_id int,counter_value counter,stud_name text,book_name text,book_id int,date_of_issue timestamp,primary key(stud_id,stud_name,book_name,book_id,date_of_issue));
+cqlsh:library2> COPY library_info22(stud_id,counter_value,stud_name,book_name,book_id,date_of_issue) from 'c:\libraryInfo.csv';
+Using 11 child processes
+
+Starting copy of library2.library_info22 with columns [stud_id, counter_value, stud_name, book_name, book_id, date_of_issue].
+Processed: 5 rows; Rate:       8 rows/s; Avg. rate:      12 rows/s
+5 rows imported from 1 files in 0.412 seconds (0 skipped).
+cqlsh:library2> 
+
